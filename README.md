@@ -1,4 +1,5 @@
-# str
+# STR - SERVIÇO EM TEMPO REAL
+
 Apostila/tutorial sobre serviços em tempo real usando Python, SocketIO e WebSocket. 
 
 O que você tem aqui:
