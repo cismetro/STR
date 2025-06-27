@@ -1,0 +1,3551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila: Serviços em Tempo Real - Python, SocketIO & WebSocket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        dark: {
+                            bg: '#181818',
+                            card: '#2a2a2a',
+                            text: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-primary text-white py-6 shadow-lg">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl font-bold text-center">
+                    <i class="fas fa-broadcast-tower mr-3"></i>
+                    Apostila: Serviços em Tempo Real
+                </h1>
+                <p class="text-center mt-2 text-blue-100">Python • SocketIO • WebSocket • Tempo Real</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-gray-100 dark:bg-dark-card border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-wrap gap-2 py-3 overflow-x-auto">
+                    <button onclick="showSection('intro')" class="nav-btn px-4 py-2 rounded-lg bg-primary text-white">
+                        <i class="fas fa-home mr-2"></i>Introdução
+                    </button>
+                    <button onclick="showSection('websocket-basics')" class="nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-network-wired mr-2"></i>WebSocket Básico
+                    </button>
+                    <button onclick="showSection('socketio')" class="nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-plug mr-2"></i>Socket.IO
+                    </button>
+                    <button onclick="showSection('chat-demo')" class="nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-comments mr-2"></i>Chat Demo
+                    </button>
+                    <button onclick="showSection('real-time-apps')" class="nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-chart-line mr-2"></i>Apps Tempo Real
+                    </button>
+                    <button onclick="showSection('production')" class="nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-server mr-2"></i>Produção
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Introdução -->
+            <section id="intro" class="section">
+                <div class="bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg p-8 mb-8">
+                    <h2 class="text-3xl font-bold mb-4">
+                        <i class="fas fa-rocket mr-3"></i>Bem-vindo à Apostila Completa!
+                    </h2>
+                    <p class="text-lg mb-4">Esta é sua jornada completa através do mundo dos serviços em tempo real com Python.</p>
+                    <div class="grid md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                            <i class="fas fa-globe text-2xl mb-2"></i>
+                            <h3 class="font-bold">WebSocket Nativo</h3>
+                            <p class="text-sm">Protocolo fundamental para comunicação bidirecional</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                            <i class="fas fa-plug text-2xl mb-2"></i>
+                            <h3 class="font-bold">Socket.IO</h3>
+                            <p class="text-sm">Framework poderoso com fallbacks e recursos avançados</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                            <i class="fas fa-cogs text-2xl mb-2"></i>
+                            <h3 class="font-bold">Aplicações Práticas</h3>
+                            <p class="text-sm">Exemplos reais e casos de uso em produção</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4 text-primary">
+                            <i class="fas fa-question-circle mr-2"></i>O que são Serviços em Tempo Real?
+                        </h3>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Comunicação instantânea entre cliente e servidor</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Dados sincronizados em tempo real</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Experiência de usuário interativa</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Notificações push instantâneas</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4 text-primary">
+                            <i class="fas fa-tools mr-2"></i>Tecnologias que Vamos Usar
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div class="w-12 h-8 bg-blue-500 rounded mr-3 flex items-center justify-center">
+                                    <i class="fab fa-python text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Python</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Linguagem principal</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-12 h-8 bg-green-500 rounded mr-3 flex items-center justify-center">
+                                    <i class="fas fa-plug text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Socket.IO</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Framework completo</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-12 h-8 bg-purple-500 rounded mr-3 flex items-center justify-center">
+                                    <i class="fas fa-network-wired text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">WebSocket</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Protocolo nativo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                        <i class="fas fa-lightbulb mr-2"></i>Casos de Uso Populares
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4 text-yellow-700 dark:text-yellow-300">
+                        <div>
+                            <i class="fas fa-comments mr-2"></i>Sistemas de Chat<br>
+                            <i class="fas fa-gamepad mr-2"></i>Jogos Multiplayer<br>
+                            <i class="fas fa-chart-line mr-2"></i>Dashboards em Tempo Real<br>
+                            <i class="fas fa-bell mr-2"></i>Notificações Push
+                        </div>
+                        <div>
+                            <i class="fas fa-users mr-2"></i>Colaboração Online<br>
+                            <i class="fas fa-money-bill-wave mr-2"></i>Trading de Criptomoedas<br>
+                            <i class="fas fa-map-marked-alt mr-2"></i>Rastreamento de Localização<br>
+                            <i class="fas fa-video mr-2"></i>Streaming de Vídeo
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WebSocket Básico -->
+            <section id="websocket-basics" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-primary">
+                    <i class="fas fa-network-wired mr-3"></i>WebSocket Básico
+                </h2>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">1. Servidor WebSocket Simples</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># servidor_websocket.py
+import asyncio
+import websockets
+import json
+from datetime import datetime
+
+# Lista de clientes conectados
+connected_clients = set()
+
+async def register_client(websocket):
+    """Registra um novo cliente"""
+    connected_clients.add(websocket)
+    print(f"Cliente conectado. Total: {len(connected_clients)}")
+
+async def unregister_client(websocket):
+    """Remove um cliente"""
+    connected_clients.remove(websocket)
+    print(f"Cliente desconectado. Total: {len(connected_clients)}")
+
+async def broadcast_message(message, sender=None):
+    """Envia mensagem para todos os clientes conectados"""
+    if connected_clients:
+        # Remove o remetente da lista se especificado
+        recipients = connected_clients.copy()
+        if sender in recipients:
+            recipients.remove(sender)
+        
+        # Envia para todos os destinatários
+        await asyncio.gather(
+            *[client.send(message) for client in recipients],
+            return_exceptions=True
+        )
+
+async def handle_client(websocket, path):
+    """Manipula conexões de clientes"""
+    await register_client(websocket)
+    
+    try:
+        async for message in websocket:
+            try:
+                # Parse da mensagem JSON
+                data = json.loads(message)
+                
+                # Adiciona timestamp
+                data['timestamp'] = datetime.now().isoformat()
+                
+                # Log no servidor
+                print(f"Mensagem recebida: {data}")
+                
+                # Retransmite para outros clientes
+                response = json.dumps(data)
+                await broadcast_message(response, sender=websocket)
+                
+            except json.JSONDecodeError:
+                # Mensagem inválida
+                error_response = json.dumps({
+                    'type': 'error',
+                    'message': 'Formato de mensagem inválido'
+                })
+                await websocket.send(error_response)
+                
+    except websockets.exceptions.ConnectionClosed:
+        pass
+    finally:
+        await unregister_client(websocket)
+
+# Configuração do servidor
+async def start_server():
+    """Inicia o servidor WebSocket"""
+    print("Iniciando servidor WebSocket na porta 8765...")
+    
+    # Servidor básico
+    server = await websockets.serve(
+        handle_client, 
+        "localhost", 
+        8765,
+        # Configurações opcionais
+        ping_interval=20,  # Ping a cada 20s
+        ping_timeout=10,   # Timeout de 10s
+        max_size=1024*1024 # Max 1MB por mensagem
+    )
+    
+    print("Servidor rodando! Acesse ws://localhost:8765")
+    return server
+
+if __name__ == "__main__":
+    # Executa o servidor
+    asyncio.run(start_server())
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">2. Cliente WebSocket Python</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># cliente_websocket.py
+import asyncio
+import websockets
+import json
+import threading
+from datetime import datetime
+
+class WebSocketClient:
+    def __init__(self, uri):
+        self.uri = uri
+        self.websocket = None
+        self.connected = False
+        
+    async def connect(self):
+        """Conecta ao servidor"""
+        try:
+            self.websocket = await websockets.connect(self.uri)
+            self.connected = True
+            print(f"Conectado ao servidor: {self.uri}")
+            
+            # Inicia o loop de recebimento
+            await self.listen_for_messages()
+            
+        except Exception as e:
+            print(f"Erro na conexão: {e}")
+            self.connected = False
+    
+    async def listen_for_messages(self):
+        """Escuta mensagens do servidor"""
+        try:
+            async for message in self.websocket:
+                data = json.loads(message)
+                await self.handle_message(data)
+                
+        except websockets.exceptions.ConnectionClosed:
+            print("Conexão fechada pelo servidor")
+            self.connected = False
+        except Exception as e:
+            print(f"Erro ao receber mensagem: {e}")
+    
+    async def handle_message(self, data):
+        """Processa mensagens recebidas"""
+        msg_type = data.get('type', 'unknown')
+        timestamp = data.get('timestamp', '')
+        
+        if msg_type == 'chat':
+            user = data.get('user', 'Anônimo')
+            message = data.get('message', '')
+            print(f"[{timestamp}] {user}: {message}")
+            
+        elif msg_type == 'notification':
+            message = data.get('message', '')
+            print(f"🔔 Notificação: {message}")
+            
+        elif msg_type == 'error':
+            message = data.get('message', '')
+            print(f"❌ Erro: {message}")
+            
+        else:
+            print(f"Mensagem recebida: {data}")
+    
+    async def send_message(self, message_type, content):
+        """Envia mensagem para o servidor"""
+        if not self.connected or not self.websocket:
+            print("Não conectado ao servidor")
+            return
+            
+        try:
+            message = {
+                'type': message_type,
+                'timestamp': datetime.now().isoformat(),
+                **content
+            }
+            
+            await self.websocket.send(json.dumps(message))
+            
+        except Exception as e:
+            print(f"Erro ao enviar mensagem: {e}")
+    
+    async def send_chat_message(self, user, message):
+        """Envia mensagem de chat"""
+        await self.send_message('chat', {
+            'user': user,
+            'message': message
+        })
+    
+    async def close(self):
+        """Fecha a conexão"""
+        if self.websocket:
+            await self.websocket.close()
+            self.connected = False
+            print("Conexão fechada")
+
+# Exemplo de uso interativo
+async def interactive_client():
+    """Cliente interativo via terminal"""
+    client = WebSocketClient("ws://localhost:8765")
+    
+    # Conecta ao servidor em uma task separada
+    connect_task = asyncio.create_task(client.connect())
+    
+    # Aguarda um pouco para estabelecer conexão
+    await asyncio.sleep(1)
+    
+    if not client.connected:
+        print("Falha na conexão!")
+        return
+    
+    # Input do usuário
+    user_name = input("Digite seu nome: ")
+    print("Digite suas mensagens (ou 'quit' para sair):")
+    
+    def get_input():
+        """Thread para capturar input do usuário"""
+        while client.connected:
+            try:
+                message = input()
+                if message.lower() == 'quit':
+                    break
+                
+                # Envia mensagem (precisa ser executado no loop principal)
+                asyncio.run_coroutine_threadsafe(
+                    client.send_chat_message(user_name, message),
+                    asyncio.get_event_loop()
+                )
+            except EOFError:
+                break
+    
+    # Inicia thread de input
+    input_thread = threading.Thread(target=get_input)
+    input_thread.daemon = True
+    input_thread.start()
+    
+    # Aguarda a conexão terminar
+    try:
+        await connect_task
+    except KeyboardInterrupt:
+        pass
+    finally:
+        await client.close()
+
+if __name__ == "__main__":
+    asyncio.run(interactive_client())
+</code></pre>
+                </div>
+
+                <div class="bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 p-6 rounded-lg mb-8">
+                    <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>Como Executar
+                    </h3>
+                    <div class="text-blue-700 dark:text-blue-300">
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Instale o websockets: <code class="bg-blue-200 dark:bg-blue-800 px-2 py-1 rounded">pip install websockets</code></li>
+                            <li>Execute o servidor: <code class="bg-blue-200 dark:bg-blue-800 px-2 py-1 rounded">python servidor_websocket.py</code></li>
+                            <li>Em outro terminal, execute o cliente: <code class="bg-blue-200 dark:bg-blue-800 px-2 py-1 rounded">python cliente_websocket.py</code></li>
+                            <li>Abra vários clientes para testar o chat!</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">3. Cliente JavaScript (Frontend)</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-javascript">// websocket_client.js
+class WebSocketClient {
+    constructor(url) {
+        this.url = url;
+        this.ws = null;
+        this.connected = false;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectDelay = 1000;
+    }
+
+    connect() {
+        try {
+            this.ws = new WebSocket(this.url);
+            
+            this.ws.onopen = (event) => {
+                console.log('Conectado ao WebSocket');
+                this.connected = true;
+                this.reconnectAttempts = 0;
+                this.onConnected(event);
+            };
+            
+            this.ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    this.onMessage(data);
+                } catch (e) {
+                    console.error('Erro ao parsear mensagem:', e);
+                }
+            };
+            
+            this.ws.onclose = (event) => {
+                console.log('Conexão fechada');
+                this.connected = false;
+                this.onDisconnected(event);
+                
+                // Tentativa de reconexão automática
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    setTimeout(() => {
+                        this.reconnectAttempts++;
+                        console.log(`Tentativa de reconexão ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
+                        this.connect();
+                    }, this.reconnectDelay * this.reconnectAttempts);
+                }
+            };
+            
+            this.ws.onerror = (error) => {
+                console.error('Erro no WebSocket:', error);
+                this.onError(error);
+            };
+            
+        } catch (error) {
+            console.error('Erro ao conectar:', error);
+        }
+    }
+
+    send(type, data) {
+        if (this.connected && this.ws.readyState === WebSocket.OPEN) {
+            const message = {
+                type: type,
+                timestamp: new Date().toISOString(),
+                ...data
+            };
+            this.ws.send(JSON.stringify(message));
+        } else {
+            console.warn('WebSocket não está conectado');
+        }
+    }
+
+    sendChatMessage(user, message) {
+        this.send('chat', { user, message });
+    }
+
+    close() {
+        if (this.ws) {
+            this.ws.close();
+        }
+    }
+
+    // Métodos a serem sobrescritos
+    onConnected(event) { }
+    onDisconnected(event) { }
+    onMessage(data) { }
+    onError(error) { }
+}
+
+// Exemplo de uso
+const client = new WebSocketClient('ws://localhost:8765');
+
+client.onConnected = () => {
+    document.getElementById('status').textContent = 'Conectado ✅';
+};
+
+client.onDisconnected = () => {
+    document.getElementById('status').textContent = 'Desconectado ❌';
+};
+
+client.onMessage = (data) => {
+    if (data.type === 'chat') {
+        addMessageToChat(data.user, data.message, data.timestamp);
+    }
+};
+
+function addMessageToChat(user, message, timestamp) {
+    const chatContainer = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.className = 'message';
+    
+    const time = new Date(timestamp).toLocaleTimeString();
+    messageElement.innerHTML = `
+        <span class="timestamp">[${time}]</span>
+        <span class="user">${user}:</span>
+        <span class="message">${message}</span>
+    `;
+    
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Conecta automaticamente
+client.connect();
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Socket.IO -->
+            <section id="socketio" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-primary">
+                    <i class="fas fa-plug mr-3"></i>Socket.IO - Framework Completo
+                </h2>
+
+                <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-2">
+                        <i class="fas fa-star mr-2"></i>Por que Socket.IO?
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <i class="fas fa-check mr-2"></i>Fallback automático para polling<br>
+                            <i class="fas fa-check mr-2"></i>Reconexão automática<br>
+                            <i class="fas fa-check mr-2"></i>Salas e namespaces<br>
+                            <i class="fas fa-check mr-2"></i>Broadcast seletivo
+                        </div>
+                        <div>
+                            <i class="fas fa-check mr-2"></i>Middleware avançado<br>
+                            <i class="fas fa-check mr-2"></i>Autenticação integrada<br>
+                            <i class="fas fa-check mr-2"></i>Multiplexing<br>
+                            <i class="fas fa-check mr-2"></i>Compatibilidade ampla
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">1. Servidor Socket.IO Completo</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># servidor_socketio.py
+import socketio
+import asyncio
+import uvicorn
+from datetime import datetime
+import json
+import logging
+
+# Configuração de logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Cria servidor Socket.IO com configurações avançadas
+sio = socketio.AsyncServer(
+    cors_allowed_origins="*",  # Em produção, especifique domínios
+    logger=True,
+    engineio_logger=True,
+    async_mode='asgi'
+)
+
+# Dicionário para armazenar dados dos usuários
+connected_users = {}
+chat_rooms = {}
+
+class ChatRoom:
+    def __init__(self, name):
+        self.name = name
+        self.users = set()
+        self.messages = []
+        self.created_at = datetime.now()
+    
+    def add_user(self, user_id, username):
+        self.users.add(user_id)
+        logger.info(f"Usuário {username} entrou na sala {self.name}")
+    
+    def remove_user(self, user_id):
+        self.users.discard(user_id)
+        if user_id in connected_users:
+            username = connected_users[user_id]['username']
+            logger.info(f"Usuário {username} saiu da sala {self.name}")
+    
+    def add_message(self, user_id, message):
+        username = connected_users.get(user_id, {}).get('username', 'Anônimo')
+        msg_data = {
+            'id': len(self.messages),
+            'user_id': user_id,
+            'username': username,
+            'message': message,
+            'timestamp': datetime.now().isoformat()
+        }
+        self.messages.append(msg_data)
+        return msg_data
+
+# Middleware para autenticação
+@sio.event
+async def connect(sid, environ, auth):
+    """Evento de conexão"""
+    try:
+        # Extrai dados de autenticação
+        username = auth.get('username', f'User_{sid[:8]}') if auth else f'User_{sid[:8]}'
+        user_id = auth.get('user_id', sid) if auth else sid
+        
+        # Armazena dados do usuário
+        connected_users[sid] = {
+            'user_id': user_id,
+            'username': username,
+            'connected_at': datetime.now(),
+            'rooms': set()
+        }
+        
+        logger.info(f"Usuário conectado: {username} (SID: {sid})")
+        
+        # Envia dados de conexão para o cliente
+        await sio.emit('connected', {
+            'user_id': user_id,
+            'username': username,
+            'timestamp': datetime.now().isoformat()
+        }, room=sid)
+        
+        # Atualiza lista de usuários online
+        await broadcast_user_list()
+        
+    except Exception as e:
+        logger.error(f"Erro na conexão: {e}")
+        return False  # Rejeita a conexão
+
+@sio.event
+async def disconnect(sid):
+    """Evento de desconexão"""
+    if sid in connected_users:
+        user_data = connected_users[sid]
+        username = user_data['username']
+        
+        # Remove usuário de todas as salas
+        for room_name in user_data['rooms'].copy():
+            await leave_room_handler(sid, room_name)
+        
+        # Remove usuário da lista
+        del connected_users[sid]
+        
+        logger.info(f"Usuário desconectado: {username} (SID: {sid})")
+        
+        # Atualiza lista de usuários
+        await broadcast_user_list()
+
+@sio.event
+async def join_room(sid, data):
+    """Usuário entra em uma sala"""
+    try:
+        room_name = data.get('room', 'general')
+        
+        if sid not in connected_users:
+            return {'error': 'Usuário não autenticado'}
+        
+        user_data = connected_users[sid]
+        username = user_data['username']
+        
+        # Cria sala se não existir
+        if room_name not in chat_rooms:
+            chat_rooms[room_name] = ChatRoom(room_name)
+        
+        # Adiciona usuário à sala
+        await sio.enter_room(sid, room_name)
+        chat_rooms[room_name].add_user(sid, username)
+        user_data['rooms'].add(room_name)
+        
+        # Notifica outros usuários da sala
+        await sio.emit('user_joined', {
+            'username': username,
+            'room': room_name,
+            'timestamp': datetime.now().isoformat()
+        }, room=room_name, skip_sid=sid)
+        
+        # Envia histórico de mensagens para o usuário
+        recent_messages = chat_rooms[room_name].messages[-50:]  # Últimas 50
+        await sio.emit('room_history', {
+            'room': room_name,
+            'messages': recent_messages
+        }, room=sid)
+        
+        # Confirma entrada na sala
+        await sio.emit('joined_room', {
+            'room': room_name,
+            'users_count': len(chat_rooms[room_name].users)
+        }, room=sid)
+        
+        return {'success': True, 'room': room_name}
+        
+    except Exception as e:
+        logger.error(f"Erro ao entrar na sala: {e}")
+        return {'error': str(e)}
+
+@sio.event
+async def leave_room_handler(sid, room_name):
+    """Usuário sai de uma sala"""
+    try:
+        if sid in connected_users and room_name in chat_rooms:
+            user_data = connected_users[sid]
+            username = user_data['username']
+            
+            # Remove da sala
+            await sio.leave_room(sid, room_name)
+            chat_rooms[room_name].remove_user(sid)
+            user_data['rooms'].discard(room_name)
+            
+            # Notifica outros usuários
+            await sio.emit('user_left', {
+                'username': username,
+                'room': room_name,
+                'timestamp': datetime.now().isoformat()
+            }, room=room_name)
+            
+    except Exception as e:
+        logger.error(f"Erro ao sair da sala: {e}")
+
+@sio.event
+async def send_message(sid, data):
+    """Envia mensagem para uma sala"""
+    try:
+        if sid not in connected_users:
+            return {'error': 'Usuário não autenticado'}
+        
+        room_name = data.get('room', 'general')
+        message = data.get('message', '').strip()
+        
+        if not message:
+            return {'error': 'Mensagem vazia'}
+        
+        if room_name not in chat_rooms:
+            return {'error': 'Sala não encontrada'}
+        
+        # Adiciona mensagem à sala
+        msg_data = chat_rooms[room_name].add_message(sid, message)
+        
+        # Envia para todos na sala
+        await sio.emit('new_message', msg_data, room=room_name)
+        
+        return {'success': True, 'message_id': msg_data['id']}
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar mensagem: {e}")
+        return {'error': str(e)}
+
+@sio.event
+async def private_message(sid, data):
+    """Envia mensagem privada"""
+    try:
+        if sid not in connected_users:
+            return {'error': 'Usuário não autenticado'}
+        
+        target_user = data.get('target_user')
+        message = data.get('message', '').strip()
+        
+        if not message:
+            return {'error': 'Mensagem vazia'}
+        
+        sender = connected_users[sid]
+        
+        # Encontra SID do usuário alvo
+        target_sid = None
+        for user_sid, user_data in connected_users.items():
+            if user_data['username'] == target_user:
+                target_sid = user_sid
+                break
+        
+        if not target_sid:
+            return {'error': 'Usuário não encontrado'}
+        
+        msg_data = {
+            'from': sender['username'],
+            'to': target_user,
+            'message': message,
+            'timestamp': datetime.now().isoformat(),
+            'type': 'private'
+        }
+        
+        # Envia para ambos os usuários
+        await sio.emit('private_message', msg_data, room=target_sid)
+        await sio.emit('private_message', msg_data, room=sid)
+        
+        return {'success': True}
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar mensagem privada: {e}")
+        return {'error': str(e)}
+
+@sio.event
+async def get_rooms(sid):
+    """Retorna lista de salas disponíveis"""
+    try:
+        rooms_info = []
+        for room_name, room in chat_rooms.items():
+            rooms_info.append({
+                'name': room_name,
+                'users_count': len(room.users),
+                'created_at': room.created_at.isoformat()
+            })
+        
+        return {'rooms': rooms_info}
+        
+    except Exception as e:
+        logger.error(f"Erro ao buscar salas: {e}")
+        return {'error': str(e)}
+
+async def broadcast_user_list():
+    """Envia lista de usuários online para todos"""
+    try:
+        users_online = []
+        for sid, user_data in connected_users.items():
+            users_online.append({
+                'username': user_data['username'],
+                'rooms': list(user_data['rooms'])
+            })
+        
+        await sio.emit('users_online', {'users': users_online})
+        
+    except Exception as e:
+        logger.error(f"Erro ao broadcast da lista de usuários: {e}")
+
+# Cria aplicação ASGI
+app = socketio.ASGIApp(sio)
+
+if __name__ == "__main__":
+    # Configuração do servidor
+    config = uvicorn.Config(
+        app=app,
+        host="0.0.0.0",
+        port=8000,
+        log_level="info",
+        reload=True  # Remove em produção
+    )
+    
+    server = uvicorn.Server(config)
+    print("Servidor Socket.IO iniciando na porta 8000...")
+    print("Acesse: http://localhost:8000")
+    
+    # Inicia o servidor
+    asyncio.run(server.serve())
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">2. Cliente Python Socket.IO</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># cliente_socketio.py
+import socketio
+import asyncio
+import threading
+import json
+from datetime import datetime
+
+class SocketIOClient:
+    def __init__(self, server_url, username):
+        self.server_url = server_url
+        self.username = username
+        self.sio = socketio.AsyncClient()
+        self.connected = False
+        self.current_room = None
+        
+        # Registra eventos
+        self.setup_events()
+    
+    def setup_events(self):
+        """Configura eventos do Socket.IO"""
+        
+        @self.sio.event
+        async def connect():
+            print(f"✅ Conectado como {self.username}")
+            self.connected = True
+        
+        @self.sio.event
+        async def disconnect():
+            print("❌ Desconectado do servidor")
+            self.connected = False
+        
+        @self.sio.event
+        async def connected(data):
+            print(f"Dados de conexão: {data}")
+        
+        @self.sio.event
+        async def new_message(data):
+            timestamp = datetime.fromisoformat(data['timestamp'].replace('Z', '+00:00'))
+            time_str = timestamp.strftime('%H:%M:%S')
+            print(f"[{time_str}] {data['username']}: {data['message']}")
+        
+        @self.sio.event
+        async def private_message(data):
+            timestamp = datetime.fromisoformat(data['timestamp'].replace('Z', '+00:00'))
+            time_str = timestamp.strftime('%H:%M:%S')
+            print(f"🔒 [{time_str}] Privado de {data['from']}: {data['message']}")
+        
+        @self.sio.event
+        async def user_joined(data):
+            print(f"👋 {data['username']} entrou na sala {data['room']}")
+        
+        @self.sio.event
+        async def user_left(data):
+            print(f"👋 {data['username']} saiu da sala {data['room']}")
+        
+        @self.sio.event
+        async def joined_room(data):
+            self.current_room = data['room']
+            print(f"🏠 Você entrou na sala '{data['room']}' ({data['users_count']} usuários)")
+        
+        @self.sio.event
+        async def room_history(data):
+            print(f"\n📜 Histórico da sala '{data['room']}':")
+            for msg in data['messages'][-10:]:  # Últimas 10 mensagens
+                timestamp = datetime.fromisoformat(msg['timestamp'])
+                time_str = timestamp.strftime('%H:%M:%S')
+                print(f"  [{time_str}] {msg['username']}: {msg['message']}")
+            print("---")
+        
+        @self.sio.event
+        async def users_online(data):
+            if data['users']:
+                print(f"\n👥 Usuários online ({len(data['users'])}):")
+                for user in data['users']:
+                    rooms = ', '.join(user['rooms']) if user['rooms'] else 'nenhuma sala'
+                    print(f"  • {user['username']} ({rooms})")
+    
+    async def connect_to_server(self):
+        """Conecta ao servidor"""
+        try:
+            auth_data = {
+                'username': self.username,
+                'user_id': f"user_{self.username}"
+            }
+            
+            await self.sio.connect(
+                self.server_url,
+                auth=auth_data,
+                wait_timeout=10
+            )
+            
+        except Exception as e:
+            print(f"Erro na conexão: {e}")
+            return False
+        
+        return True
+    
+    async def join_room(self, room_name):
+        """Entra em uma sala"""
+        if not self.connected:
+            print("Não conectado ao servidor")
+            return
+        
+        result = await self.sio.call('join_room', {'room': room_name})
+        if result.get('error'):
+            print(f"Erro ao entrar na sala: {result['error']}")
+    
+    async def send_message(self, message):
+        """Envia mensagem para a sala atual"""
+        if not self.current_room:
+            print("Você não está em nenhuma sala")
+            return
+        
+        result = await self.sio.call('send_message', {
+            'room': self.current_room,
+            'message': message
+        })
+        
+        if result.get('error'):
+            print(f"Erro ao enviar mensagem: {result['error']}")
+    
+    async def send_private_message(self, target_user, message):
+        """Envia mensagem privada"""
+        result = await self.sio.call('private_message', {
+            'target_user': target_user,
+            'message': message
+        })
+        
+        if result.get('error'):
+            print(f"Erro ao enviar mensagem privada: {result['error']}")
+    
+    async def get_rooms(self):
+        """Lista salas disponíveis"""
+        result = await self.sio.call('get_rooms')
+        if result.get('rooms'):
+            print("\n🏠 Salas disponíveis:")
+            for room in result['rooms']:
+                print(f"  • {room['name']} ({room['users_count']} usuários)")
+        else:
+            print("Nenhuma sala disponível")
+    
+    async def disconnect(self):
+        """Desconecta do servidor"""
+        if self.connected:
+            await self.sio.disconnect()
+
+# Interface interativa
+async def interactive_client():
+    """Cliente interativo via terminal"""
+    
+    # Configuração inicial
+    print("=== Cliente Socket.IO ===")
+    username = input("Digite seu nome de usuário: ")
+    server_url = input("URL do servidor (padrão: http://localhost:8000): ") or "http://localhost:8000"
+    
+    client = SocketIOClient(server_url, username)
+    
+    # Conecta ao servidor
+    print("Conectando...")
+    if not await client.connect_to_server():
+        print("Falha na conexão!")
+        return
+    
+    # Aguarda estabelecer conexão
+    await asyncio.sleep(1)
+    
+    print(f"""
+✅ Conectado com sucesso!
+
+Comandos disponíveis:
+  /join <sala>           - Entrar em uma sala
+  /rooms                 - Listar salas
+  /private <user> <msg>  - Mensagem privada
+  /help                  - Mostrar ajuda
+  /quit                  - Sair
+
+Para enviar mensagem na sala: digite diretamente
+""")
+    
+    # Loop principal
+    try:
+        while client.connected:
+            message = await asyncio.get_event_loop().run_in_executor(
+                None, input, f"[{client.current_room or 'sem sala'}] > "
+            )
+            
+            if message.startswith('/'):
+                # Processa comandos
+                parts = message.split(' ', 2)
+                command = parts[0]
+                
+                if command == '/quit':
+                    break
+                elif command == '/join' and len(parts) > 1:
+                    await client.join_room(parts[1])
+                elif command == '/rooms':
+                    await client.get_rooms()
+                elif command == '/private' and len(parts) > 2:
+                    await client.send_private_message(parts[1], parts[2])
+                elif command == '/help':
+                    print("Comandos: /join, /rooms, /private, /help, /quit")
+                else:
+                    print("Comando inválido. Use /help para ver comandos")
+            
+            elif message.strip():
+                # Envia mensagem normal
+                await client.send_message(message)
+    
+    except KeyboardInterrupt:
+        pass
+    finally:
+        await client.disconnect()
+        print("Desconectado!")
+
+if __name__ == "__main__":
+    # Instala dependências necessárias
+    # pip install python-socketio[asyncio_client] uvicorn
+    
+    asyncio.run(interactive_client())
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">3. Cliente JavaScript/HTML Completo</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-html"><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Socket.IO</title>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .chat-container { border: 1px solid #ddd; height: 400px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
+        .message { margin-bottom: 8px; }
+        .timestamp { color: #888; font-size: 0.8em; }
+        .username { font-weight: bold; color: #007bff; }
+        .private { background: #fff3cd; padding: 5px; border-radius: 3px; }
+        .system { color: #6c757d; font-style: italic; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        input[type="text"] { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .users-list { background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+        .room-info { background: #e3f2fd; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💬 Chat Socket.IO</h1>
+        
+        <!-- Status da conexão -->
+        <div id="connection-status" class="room-info">
+            Desconectado
+        </div>
+        
+        <!-- Informações da sala atual -->
+        <div id="room-info" class="room-info" style="display: none;">
+            Sala: <span id="current-room">-</span> | Usuários online: <span id="users-count">0</span>
+        </div>
+        
+        <!-- Controles -->
+        <div class="input-group">
+            <input type="text" id="username-input" placeholder="Seu nome de usuário" value="Usuario123">
+            <button onclick="connectToServer()">Conectar</button>
+            <button onclick="disconnectFromServer()">Desconectar</button>
+        </div>
+        
+        <div class="input-group">
+            <input type="text" id="room-input" placeholder="Nome da sala" value="geral">
+            <button onclick="joinRoom()">Entrar na Sala</button>
+            <button onclick="listRooms()">Listar Salas</button>
+        </div>
+        
+        <!-- Lista de usuários online -->
+        <div id="users-online" class="users-list" style="display: none;">
+            <strong>Usuários Online:</strong>
+            <div id="users-list"></div>
+        </div>
+        
+        <!-- Área do chat -->
+        <div id="chat-messages" class="chat-container"></div>
+        
+        <!-- Input de mensagem -->
+        <div class="input-group">
+            <input type="text" id="message-input" placeholder="Digite sua mensagem..." disabled>
+            <button onclick="sendMessage()" disabled id="send-btn">Enviar</button>
+        </div>
+        
+        <!-- Mensagem privada -->
+        <div class="input-group">
+            <input type="text" id="private-user" placeholder="Usuário para mensagem privada">
+            <input type="text" id="private-message" placeholder="Mensagem privada">
+            <button onclick="sendPrivateMessage()">Enviar Privado</button>
+        </div>
+    </div>
+
+    <script>
+        class ChatClient {
+            constructor() {
+                this.socket = null;
+                this.connected = false;
+                this.username = null;
+                this.currentRoom = null;
+                
+                // Elementos DOM
+                this.connectionStatus = document.getElementById('connection-status');
+                this.chatMessages = document.getElementById('chat-messages');
+                this.messageInput = document.getElementById('message-input');
+                this.sendBtn = document.getElementById('send-btn');
+                this.roomInfo = document.getElementById('room-info');
+                this.usersOnline = document.getElementById('users-online');
+                
+                // Event listeners
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+            }
+            
+            connect(username) {
+                if (this.connected) {
+                    this.addSystemMessage('Já conectado ao servidor');
+                    return;
+                }
+                
+                this.username = username;
+                
+                // Configuração da conexão
+                this.socket = io('http://localhost:8000', {
+                    auth: {
+                        username: username,
+                        user_id: `user_${username}_${Date.now()}`
+                    },
+                    transports: ['websocket', 'polling']
+                });
+                
+                this.setupEventHandlers();
+                
+                this.addSystemMessage(`Conectando como ${username}...`);
+            }
+            
+            setupEventHandlers() {
+                // Eventos de conexão
+                this.socket.on('connect', () => {
+                    this.connected = true;
+                    this.connectionStatus.textContent = `✅ Conectado como ${this.username}`;
+                    this.connectionStatus.style.background = '#d4edda';
+                    this.enableControls(true);
+                    this.addSystemMessage('Conectado com sucesso!');
+                });
+                
+                this.socket.on('disconnect', () => {
+                    this.connected = false;
+                    this.connectionStatus.textContent = '❌ Desconectado';
+                    this.connectionStatus.style.background = '#f8d7da';
+                    this.enableControls(false);
+                    this.addSystemMessage('Desconectado do servidor');
+                });
+                
+                this.socket.on('connect_error', (error) => {
+                    this.addSystemMessage(`Erro de conexão: ${error.message}`);
+                });
+                
+                // Eventos do chat
+                this.socket.on('new_message', (data) => {
+                    this.addChatMessage(data);
+                });
+                
+                this.socket.on('private_message', (data) => {
+                    this.addPrivateMessage(data);
+                });
+                
+                this.socket.on('user_joined', (data) => {
+                    this.addSystemMessage(`${data.username} entrou na sala`);
+                });
+                
+                this.socket.on('user_left', (data) => {
+                    this.addSystemMessage(`${data.username} saiu da sala`);
+                });
+                
+                this.socket.on('joined_room', (data) => {
+                    this.currentRoom = data.room;
+                    document.getElementById('current-room').textContent = data.room;
+                    document.getElementById('users-count').textContent = data.users_count;
+                    this.roomInfo.style.display = 'block';
+                    this.addSystemMessage(`Você entrou na sala "${data.room}"`);
+                });
+                
+                this.socket.on('room_history', (data) => {
+                    this.addSystemMessage(`=== Histórico da sala "${data.room}" ===`);
+                    data.messages.slice(-10).forEach(msg => {
+                        this.addChatMessage(msg);
+                    });
+                    this.addSystemMessage('=== Fim do histórico ===');
+                });
+                
+                this.socket.on('users_online', (data) => {
+                    this.updateUsersList(data.users);
+                });
+            }
+            
+            joinRoom(roomName) {
+                if (!this.connected) {
+                    this.addSystemMessage('Não conectado ao servidor');
+                    return;
+                }
+                
+                this.socket.emit('join_room', { room: roomName }, (response) => {
+                    if (response.error) {
+                        this.addSystemMessage(`Erro ao entrar na sala: ${response.error}`);
+                    }
+                });
+            }
+            
+            sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || !this.connected || !this.currentRoom) return;
+                
+                this.socket.emit('send_message', {
+                    room: this.currentRoom,
+                    message: message
+                }, (response) => {
+                    if (response.error) {
+                        this.addSystemMessage(`Erro ao enviar mensagem: ${response.error}`);
+                    } else {
+                        this.messageInput.value = '';
+                    }
+                });
+            }
+            
+            sendPrivateMessage(targetUser, message) {
+                if (!this.connected) return;
+                
+                this.socket.emit('private_message', {
+                    target_user: targetUser,
+                    message: message
+                }, (response) => {
+                    if (response.error) {
+                        this.addSystemMessage(`Erro ao enviar mensagem privada: ${response.error}`);
+                    }
+                });
+            }
+            
+            getRooms() {
+                if (!this.connected) return;
+                
+                this.socket.emit('get_rooms', {}, (response) => {
+                    if (response.rooms) {
+                        this.addSystemMessage('=== Salas Disponíveis ===');
+                        response.rooms.forEach(room => {
+                            this.addSystemMessage(`• ${room.name} (${room.users_count} usuários)`);
+                        });
+                        this.addSystemMessage('=== Fim da lista ===');
+                    }
+                });
+            }
+            
+            disconnect() {
+                if (this.socket) {
+                    this.socket.disconnect();
+                    this.socket = null;
+                }
+            }
+            
+            // Métodos de UI
+            addChatMessage(data) {
+                const timestamp = new Date(data.timestamp).toLocaleTimeString();
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                messageDiv.innerHTML = `
+                    <span class="timestamp">[${timestamp}]</span>
+                    <span class="username">${data.username}:</span>
+                    ${data.message}
+                `;
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addPrivateMessage(data) {
+                const timestamp = new Date(data.timestamp).toLocaleTimeString();
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message private';
+                messageDiv.innerHTML = `
+                    <span class="timestamp">[${timestamp}]</span>
+                    <strong>🔒 Privado ${data.from} → ${data.to}:</strong>
+                    ${data.message}
+                `;
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addSystemMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message system';
+                messageDiv.textContent = `ℹ️ ${message}`;
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            updateUsersList(users) {
+                const usersList = document.getElementById('users-list');
+                usersList.innerHTML = '';
+                
+                if (users.length > 0) {
+                    this.usersOnline.style.display = 'block';
+                    users.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        const rooms = user.rooms.length > 0 ? ` (${user.rooms.join(', ')})` : '';
+                        userDiv.textContent = `• ${user.username}${rooms}`;
+                        usersList.appendChild(userDiv);
+                    });
+                } else {
+                    this.usersOnline.style.display = 'none';
+                }
+            }
+            
+            enableControls(enabled) {
+                this.messageInput.disabled = !enabled;
+                this.sendBtn.disabled = !enabled;
+            }
+            
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+        }
+        
+        // Instância global do cliente
+        const chatClient = new ChatClient();
+        
+        // Funções globais para os botões
+        function connectToServer() {
+            const username = document.getElementById('username-input').value.trim();
+            if (!username) {
+                alert('Digite um nome de usuário');
+                return;
+            }
+            chatClient.connect(username);
+        }
+        
+        function disconnectFromServer() {
+            chatClient.disconnect();
+        }
+        
+        function joinRoom() {
+            const roomName = document.getElementById('room-input').value.trim();
+            if (!roomName) {
+                alert('Digite o nome da sala');
+                return;
+            }
+            chatClient.joinRoom(roomName);
+        }
+        
+        function sendMessage() {
+            chatClient.sendMessage();
+        }
+        
+        function sendPrivateMessage() {
+            const targetUser = document.getElementById('private-user').value.trim();
+            const message = document.getElementById('private-message').value.trim();
+            
+            if (!targetUser || !message) {
+                alert('Digite o usuário e a mensagem');
+                return;
+            }
+            
+            chatClient.sendPrivateMessage(targetUser, message);
+            document.getElementById('private-message').value = '';
+        }
+        
+        function listRooms() {
+            chatClient.getRooms();
+        }
+    </script>
+</body>
+</html>
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Chat Demo -->
+            <section id="chat-demo" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-primary">
+                    <i class="fas fa-comments mr-3"></i>Demo de Chat em Tempo Real
+                </h2>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">Simulador de Chat (Demonstração)</h3>
+                    
+                    <!-- Chat Interface -->
+                    <div class="border border-gray-300 dark:border-gray-600 rounded-lg">
+                        <!-- Chat Header -->
+                        <div class="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i class="fas fa-comments mr-2"></i>
+                                <span>Sala: <span id="demo-room-name">Geral</span></span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span id="demo-users-count">3 usuários online</span>
+                                <div id="demo-connection-status" class="w-3 h-3 bg-green-400 rounded-full"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Messages Area -->
+                        <div id="demo-chat-messages" class="h-64 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-800">
+                            <!-- Mensagens serão adicionadas aqui -->
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="p-4 border-t border-gray-300 dark:border-gray-600">
+                            <div class="flex space-x-2">
+                                <input 
+                                    type="text" 
+                                    id="demo-message-input" 
+                                    placeholder="Digite sua mensagem..." 
+                                    class="flex-1 text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-white"
+                                >
+                                <button 
+                                    onclick="sendDemoMessage()" 
+                                    class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-purple-600 transition-colors"
+                                >
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Demo Controls -->
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button onclick="simulateUserJoin()" class="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                            <i class="fas fa-user-plus mr-1"></i>Simular Entrada
+                        </button>
+                        <button onclick="simulateSystemMessage()" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>Mensagem Sistema
+                        </button>
+                        <button onclick="simulatePrivateMessage()" class="px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                            <i class="fas fa-lock mr-1"></i>Mensagem Privada
+                        </button>
+                        <button onclick="clearDemoChat()" class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                            <i class="fas fa-trash mr-1"></i>Limpar Chat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">Chat em Flask com Socket.IO</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># app.py - Chat completo com Flask-SocketIO
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO, emit, join_room, leave_room, rooms
+import json
+from datetime import datetime
+import uuid
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
+
+# Configuração do SocketIO
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins="*",
+    async_mode='threading'
+)
+
+# Armazenamento em memória (use Redis em produção)
+users_online = {}
+chat_rooms = {
+    'geral': {'users': set(), 'messages': []},
+    'python': {'users': set(), 'messages': []},
+    'tecnologia': {'users': set(), 'messages': []}
+}
+
+@app.route('/')
+def index():
+    """Página principal do chat"""
+    return render_template('chat.html')
+
+@app.route('/api/rooms')
+def get_rooms():
+    """API para listar salas"""
+    rooms_info = []
+    for room_name, room_data in chat_rooms.items():
+        rooms_info.append({
+            'name': room_name,
+            'users_count': len(room_data['users']),
+            'last_activity': datetime.now().isoformat()
+        })
+    return {'rooms': rooms_info}
+
+@socketio.on('connect')
+def handle_connect(auth):
+    """Usuário conectou"""
+    user_id = request.sid
+    username = auth.get('username', f'Usuario_{user_id[:8]}') if auth else f'Usuario_{user_id[:8]}'
+    
+    # Registra usuário
+    users_online[user_id] = {
+        'username': username,
+        'connected_at': datetime.now(),
+        'current_room': None
+    }
+    
+    print(f"✅ {username} conectou (ID: {user_id})")
+    
+    # Notifica cliente sobre conexão bem-sucedida
+    emit('connected', {
+        'user_id': user_id,
+        'username': username,
+        'timestamp': datetime.now().isoformat()
+    })
+    
+    # Atualiza contadores globais
+    update_users_count()
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    """Usuário desconectou"""
+    user_id = request.sid
+    
+    if user_id in users_online:
+        username = users_online[user_id]['username']
+        current_room = users_online[user_id]['current_room']
+        
+        # Remove das salas
+        if current_room and current_room in chat_rooms:
+            chat_rooms[current_room]['users'].discard(user_id)
+            emit('user_left', {
+                'username': username,
+                'room': current_room,
+                'timestamp': datetime.now().isoformat()
+            }, room=current_room)
+        
+        # Remove do registro
+        del users_online[user_id]
+        print(f"❌ {username} desconectou")
+        
+        update_users_count()
+
+@socketio.on('join_room')
+def handle_join_room(data):
+    """Usuário entra em uma sala"""
+    user_id = request.sid
+    room_name = data.get('room', 'geral')
+    
+    if user_id not in users_online:
+        emit('error', {'message': 'Usuário não autenticado'})
+        return
+    
+    username = users_online[user_id]['username']
+    
+    # Cria sala se não existir
+    if room_name not in chat_rooms:
+        chat_rooms[room_name] = {'users': set(), 'messages': []}
+    
+    # Sai da sala anterior
+    previous_room = users_online[user_id]['current_room']
+    if previous_room and previous_room in chat_rooms:
+        leave_room(previous_room)
+        chat_rooms[previous_room]['users'].discard(user_id)
+        emit('user_left', {
+            'username': username,
+            'room': previous_room,
+            'timestamp': datetime.now().isoformat()
+        }, room=previous_room)
+    
+    # Entra na nova sala
+    join_room(room_name)
+    chat_rooms[room_name]['users'].add(user_id)
+    users_online[user_id]['current_room'] = room_name
+    
+    # Notifica outros usuários
+    emit('user_joined', {
+        'username': username,
+        'room': room_name,
+        'timestamp': datetime.now().isoformat()
+    }, room=room_name, include_self=False)
+    
+    # Envia histórico para o usuário
+    recent_messages = chat_rooms[room_name]['messages'][-20:]
+    emit('room_history', {
+        'room': room_name,
+        'messages': recent_messages
+    })
+    
+    # Confirma entrada na sala
+    emit('joined_room', {
+        'room': room_name,
+        'users_count': len(chat_rooms[room_name]['users'])
+    })
+    
+    print(f"🏠 {username} entrou na sala '{room_name}'")
+
+@socketio.on('send_message')
+def handle_send_message(data):
+    """Usuário envia mensagem"""
+    user_id = request.sid
+    message = data.get('message', '').strip()
+    
+    if user_id not in users_online:
+        emit('error', {'message': 'Usuário não autenticado'})
+        return
+    
+    if not message:
+        emit('error', {'message': 'Mensagem vazia'})
+        return
+    
+    user_data = users_online[user_id]
+    username = user_data['username']
+    room_name = user_data['current_room']
+    
+    if not room_name:
+        emit('error', {'message': 'Não está em nenhuma sala'})
+        return
+    
+    # Cria dados da mensagem
+    message_data = {
+        'id': str(uuid.uuid4()),
+        'user_id': user_id,
+        'username': username,
+        'message': message,
+        'timestamp': datetime.now().isoformat(),
+        'room': room_name
+    }
+    
+    # Armazena mensagem
+    chat_rooms[room_name]['messages'].append(message_data)
+    
+    # Mantém apenas últimas 100 mensagens por sala
+    if len(chat_rooms[room_name]['messages']) > 100:
+        chat_rooms[room_name]['messages'] = chat_rooms[room_name]['messages'][-100:]
+    
+    # Envia para todos na sala
+    emit('new_message', message_data, room=room_name)
+    
+    print(f"💬 [{room_name}] {username}: {message}")
+
+@socketio.on('private_message')
+def handle_private_message(data):
+    """Mensagem privada entre usuários"""
+    sender_id = request.sid
+    target_username = data.get('target_user')
+    message = data.get('message', '').strip()
+    
+    if sender_id not in users_online:
+        emit('error', {'message': 'Usuário não autenticado'})
+        return
+    
+    if not message:
+        emit('error', {'message': 'Mensagem vazia'})
+        return
+    
+    # Encontra usuário alvo
+    target_id = None
+    for uid, user_data in users_online.items():
+        if user_data['username'] == target_username:
+            target_id = uid
+            break
+    
+    if not target_id:
+        emit('error', {'message': 'Usuário não encontrado'})
+        return
+    
+    sender_username = users_online[sender_id]['username']
+    
+    message_data = {
+        'id': str(uuid.uuid4()),
+        'from': sender_username,
+        'to': target_username,
+        'message': message,
+        'timestamp': datetime.now().isoformat(),
+        'type': 'private'
+    }
+    
+    # Envia para ambos os usuários
+    emit('private_message', message_data, room=target_id)
+    emit('private_message', message_data, room=sender_id)
+    
+    print(f"🔒 {sender_username} → {target_username}: {message}")
+
+@socketio.on('typing_start')
+def handle_typing_start(data):
+    """Usuário começou a digitar"""
+    user_id = request.sid
+    if user_id in users_online:
+        username = users_online[user_id]['username']
+        room_name = users_online[user_id]['current_room']
+        
+        if room_name:
+            emit('user_typing', {
+                'username': username,
+                'typing': True
+            }, room=room_name, include_self=False)
+
+@socketio.on('typing_stop')
+def handle_typing_stop(data):
+    """Usuário parou de digitar"""
+    user_id = request.sid
+    if user_id in users_online:
+        username = users_online[user_id]['username']
+        room_name = users_online[user_id]['current_room']
+        
+        if room_name:
+            emit('user_typing', {
+                'username': username,
+                'typing': False
+            }, room=room_name, include_self=False)
+
+def update_users_count():
+    """Atualiza contador de usuários para todos"""
+    users_by_room = {}
+    for user_id, user_data in users_online.items():
+        room = user_data.get('current_room')
+        if room:
+            if room not in users_by_room:
+                users_by_room[room] = []
+            users_by_room[room].append({
+                'username': user_data['username'],
+                'connected_at': user_data['connected_at'].isoformat()
+            })
+    
+    socketio.emit('users_update', {
+        'total_online': len(users_online),
+        'users_by_room': users_by_room
+    })
+
+if __name__ == '__main__':
+    print("🚀 Iniciando servidor Flask-SocketIO...")
+    print("📡 Acesse: http://localhost:5000")
+    
+    socketio.run(
+        app, 
+        host='0.0.0.0', 
+        port=5000, 
+        debug=True,
+        allow_unsafe_werkzeug=True
+    )
+</code></pre>
+                </div>
+
+                <div class="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                        <i class="fas fa-terminal mr-2"></i>Instalação e Execução
+                    </h3>
+                    <div class="text-yellow-700 dark:text-yellow-300">
+                        <pre class="bg-yellow-100 dark:bg-yellow-800 p-3 rounded text-sm"><code># Instala dependências
+pip install flask flask-socketio
+
+# Cria estrutura de pastas
+mkdir templates static
+
+# Executa o servidor
+python app.py
+
+# Acesse http://localhost:5000</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Apps Tempo Real -->
+            <section id="real-time-apps" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-primary">
+                    <i class="fas fa-chart-line mr-3"></i>Aplicações em Tempo Real
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <!-- Dashboard em Tempo Real -->
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4 text-primary">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard em Tempo Real
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Métricas simuladas -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-blue-600" id="metric-users">0</div>
+                                    <div class="text-sm text-blue-800 dark:text-blue-200">Usuários Online</div>
+                                </div>
+                                <div class="bg-green-100 dark:bg-green-900 p-4 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-green-600" id="metric-messages">0</div>
+                                    <div class="text-sm text-green-800 dark:text-green-200">Mensagens/min</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gráfico simulado -->
+                            <div class="bg-gray-100 dark:bg-gray-700 h-32 rounded-lg flex items-center justify-center">
+                                <canvas id="dashboard-chart" width="300" height="120"></canvas>
+                            </div>
+                            
+                            <!-- Log de atividades -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-24 overflow-y-auto text-xs">
+                                <div id="activity-log">
+                                    <div class="text-gray-500">Aguardando atividades...</div>
+                                </div>
+                            </div>
+                            
+                            <button onclick="toggleDashboard()" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                                <span id="dashboard-btn-text">Iniciar Dashboard</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Notificações Push -->
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4 text-primary">
+                            <i class="fas fa-bell mr-2"></i>Sistema de Notificações
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Centro de notificações -->
+                            <div id="notifications-container" class="space-y-2 max-h-48 overflow-y-auto">
+                                <div class="text-gray-500 text-center py-4">
+                                    Nenhuma notificação
+                                </div>
+                            </div>
+                            
+                            <!-- Controles -->
+                            <div class="space-y-2">
+                                <select id="notification-type" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                                    <option value="info">Informação</option>
+                                    <option value="success">Sucesso</option>
+                                    <option value="warning">Aviso</option>
+                                    <option value="error">Erro</option>
+                                </select>
+                                
+                                <input 
+                                    type="text" 
+                                    id="notification-message" 
+                                    placeholder="Mensagem da notificação..." 
+                                    class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                                >
+                                
+                                <button onclick="sendNotification()" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-paper-plane mr-2"></i>Enviar Notificação
+                                </button>
+                                
+                                <button onclick="clearNotifications()" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-trash mr-2"></i>Limpar Todas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">Sistema de Monitoramento em Tempo Real</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># monitor_sistema.py - Monitoramento de sistema em tempo real
+import asyncio
+import psutil
+import json
+import time
+from datetime import datetime
+import socketio
+from typing import Dict, List
+
+class SystemMonitor:
+    def __init__(self):
+        self.sio = socketio.AsyncServer(cors_allowed_origins="*")
+        self.app = socketio.ASGIApp(self.sio)
+        self.monitoring = False
+        self.clients = set()
+        
+        # Histórico de métricas
+        self.metrics_history = {
+            'cpu': [],
+            'memory': [],
+            'disk': [],
+            'network': []
+        }
+        
+        self.setup_events()
+    
+    def setup_events(self):
+        @self.sio.event
+        async def connect(sid, environ):
+            self.clients.add(sid)
+            print(f"Cliente conectado: {sid}")
+            
+            # Envia estado inicial
+            await self.sio.emit('monitoring_status', {
+                'active': self.monitoring,
+                'clients_count': len(self.clients)
+            }, room=sid)
+            
+            # Envia histórico recente
+            await self.send_metrics_history(sid)
+        
+        @self.sio.event
+        async def disconnect(sid):
+            self.clients.discard(sid)
+            print(f"Cliente desconectado: {sid}")
+        
+        @self.sio.event
+        async def start_monitoring(sid):
+            if not self.monitoring:
+                self.monitoring = True
+                asyncio.create_task(self.monitor_loop())
+                await self.sio.emit('monitoring_started', {'timestamp': datetime.now().isoformat()})
+        
+        @self.sio.event
+        async def stop_monitoring(sid):
+            self.monitoring = False
+            await self.sio.emit('monitoring_stopped', {'timestamp': datetime.now().isoformat()})
+        
+        @self.sio.event
+        async def get_process_list(sid):
+            processes = self.get_top_processes()
+            await self.sio.emit('process_list', {'processes': processes}, room=sid)
+    
+    def get_system_metrics(self) -> Dict:
+        """Coleta métricas do sistema"""
+        # CPU
+        cpu_percent = psutil.cpu_percent(interval=1)
+        cpu_count = psutil.cpu_count()
+        cpu_freq = psutil.cpu_freq()
+        
+        # Memória
+        memory = psutil.virtual_memory()
+        swap = psutil.swap_memory()
+        
+        # Disco
+        disk = psutil.disk_usage('/')
+        disk_io = psutil.disk_io_counters()
+        
+        # Rede
+        network_io = psutil.net_io_counters()
+        network_connections = len(psutil.net_connections())
+        
+        # Processos
+        process_count = len(psutil.pids())
+        
+        # Temperatura (se disponível)
+        try:
+            temperatures = psutil.sensors_temperatures()
+            temp_avg = 0
+            if temperatures:
+                temp_values = []
+                for name, entries in temperatures.items():
+                    for entry in entries:
+                        if entry.current:
+                            temp_values.append(entry.current)
+                temp_avg = sum(temp_values) / len(temp_values) if temp_values else 0
+        except:
+            temp_avg = 0
+        
+        metrics = {
+            'timestamp': datetime.now().isoformat(),
+            'cpu': {
+                'percent': cpu_percent,
+                'count': cpu_count,
+                'freq_current': cpu_freq.current if cpu_freq else 0,
+                'freq_max': cpu_freq.max if cpu_freq else 0
+            },
+            'memory': {
+                'total': memory.total,
+                'available': memory.available,
+                'percent': memory.percent,
+                'used': memory.used,
+                'free': memory.free,
+                'swap_total': swap.total,
+                'swap_used': swap.used,
+                'swap_percent': swap.percent
+            },
+            'disk': {
+                'total': disk.total,
+                'used': disk.used,
+                'free': disk.free,
+                'percent': disk.percent,
+                'read_bytes': disk_io.read_bytes if disk_io else 0,
+                'write_bytes': disk_io.write_bytes if disk_io else 0
+            },
+            'network': {
+                'bytes_sent': network_io.bytes_sent,
+                'bytes_recv': network_io.bytes_recv,
+                'packets_sent': network_io.packets_sent,
+                'packets_recv': network_io.packets_recv,
+                'connections': network_connections
+            },
+            'system': {
+                'process_count': process_count,
+                'temperature': temp_avg,
+                'uptime': time.time() - psutil.boot_time()
+            }
+        }
+        
+        return metrics
+    
+    def get_top_processes(self, limit: int = 10) -> List[Dict]:
+        """Retorna os processos que mais consomem recursos"""
+        processes = []
+        
+        for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent', 'status']):
+            try:
+                proc_info = proc.info
+                proc_info['cpu_percent'] = proc.cpu_percent()
+                processes.append(proc_info)
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        
+        # Ordena por CPU
+        processes.sort(key=lambda x: x.get('cpu_percent', 0), reverse=True)
+        
+        return processes[:limit]
+    
+    async def monitor_loop(self):
+        """Loop principal de monitoramento"""
+        while self.monitoring and self.clients:
+            try:
+                # Coleta métricas
+                metrics = self.get_system_metrics()
+                
+                # Armazena no histórico (mantém últimas 100 entradas)
+                for key in self.metrics_history:
+                    if key in metrics:
+                        self.metrics_history[key].append({
+                            'timestamp': metrics['timestamp'],
+                            'value': metrics[key]
+                        })
+                        
+                        if len(self.metrics_history[key]) > 100:
+                            self.metrics_history[key] = self.metrics_history[key][-100:]
+                
+                # Envia para todos os clientes
+                await self.sio.emit('system_metrics', metrics)
+                
+                # Verifica alertas
+                alerts = self.check_alerts(metrics)
+                if alerts:
+                    await self.sio.emit('system_alerts', {'alerts': alerts})
+                
+                # Aguarda próxima coleta
+                await asyncio.sleep(2)
+                
+            except Exception as e:
+                print(f"Erro no monitoramento: {e}")
+                await asyncio.sleep(5)
+        
+        self.monitoring = False
+    
+    def check_alerts(self, metrics: Dict) -> List[Dict]:
+        """Verifica condições de alerta"""
+        alerts = []
+        
+        # CPU alto
+        if metrics['cpu']['percent'] > 80:
+            alerts.append({
+                'type': 'warning',
+                'title': 'CPU Alto',
+                'message': f"Uso de CPU em {metrics['cpu']['percent']:.1f}%",
+                'timestamp': datetime.now().isoformat()
+            })
+        
+        # Memória alta
+        if metrics['memory']['percent'] > 85:
+            alerts.append({
+                'type': 'warning',
+                'title': 'Memória Alta',
+                'message': f"Uso de memória em {metrics['memory']['percent']:.1f}%",
+                'timestamp': datetime.now().isoformat()
+            })
+        
+        # Disco cheio
+        if metrics['disk']['percent'] > 90:
+            alerts.append({
+                'type': 'error',
+                'title': 'Disco Cheio',
+                'message': f"Uso de disco em {metrics['disk']['percent']:.1f}%",
+                'timestamp': datetime.now().isoformat()
+            })
+        
+        # Temperatura alta
+        if metrics['system']['temperature'] > 75:
+            alerts.append({
+                'type': 'warning',
+                'title': 'Temperatura Alta',
+                'message': f"Temperatura do sistema: {metrics['system']['temperature']:.1f}°C",
+                'timestamp': datetime.now().isoformat()
+            })
+        
+        return alerts
+    
+    async def send_metrics_history(self, sid: str):
+        """Envia histórico de métricas para um cliente"""
+        await self.sio.emit('metrics_history', {
+            'history': self.metrics_history
+        }, room=sid)
+
+# Servidor de exemplo
+if __name__ == "__main__":
+    import uvicorn
+    
+    monitor = SystemMonitor()
+    
+    print("🖥️  Iniciando monitor de sistema...")
+    print("📊 Acesse: http://localhost:8001")
+    
+    config = uvicorn.Config(
+        app=monitor.app,
+        host="0.0.0.0",
+        port=8001,
+        log_level="info"
+    )
+    
+    server = uvicorn.Server(config)
+    asyncio.run(server.serve())
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Trading/Criptomoedas em Tempo Real</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># crypto_monitor.py - Monitor de criptomoedas em tempo real
+import asyncio
+import aiohttp
+import json
+from datetime import datetime
+import socketio
+from typing import Dict, List
+import logging
+
+class CryptoMonitor:
+    def __init__(self):
+        self.sio = socketio.AsyncServer(cors_allowed_origins="*")
+        self.app = socketio.ASGIApp(self.sio)
+        
+        # Configuração
+        self.api_url = "https://api.coingecko.com/api/v3"
+        self.coins_to_track = [
+            'bitcoin', 'ethereum', 'binancecoin', 'cardano', 
+            'solana', 'polkadot', 'dogecoin', 'avalanche-2'
+        ]
+        
+        # Estado
+        self.monitoring = False
+        self.clients = {}
+        self.price_history = {}
+        self.alerts = {}
+        
+        self.setup_events()
+    
+    def setup_events(self):
+        @self.sio.event
+        async def connect(sid, environ, auth):
+            user_id = auth.get('user_id', sid) if auth else sid
+            self.clients[sid] = {
+                'user_id': user_id,
+                'connected_at': datetime.now(),
+                'subscriptions': set(self.coins_to_track)  # Por padrão, todas as moedas
+            }
+            
+            print(f"📱 Cliente conectado: {user_id}")
+            
+            # Envia dados iniciais
+            await self.send_initial_data(sid)
+        
+        @self.sio.event
+        async def disconnect(sid):
+            if sid in self.clients:
+                user_id = self.clients[sid]['user_id']
+                del self.clients[sid]
+                print(f"📱 Cliente desconectado: {user_id}")
+        
+        @self.sio.event
+        async def subscribe_coin(sid, data):
+            """Cliente se inscreve para uma moeda específica"""
+            coin_id = data.get('coin_id')
+            if sid in self.clients and coin_id:
+                self.clients[sid]['subscriptions'].add(coin_id)
+                await self.sio.emit('subscription_updated', {
+                    'coin_id': coin_id,
+                    'subscribed': True
+                }, room=sid)
+        
+        @self.sio.event
+        async def unsubscribe_coin(sid, data):
+            """Cliente cancela inscrição de uma moeda"""
+            coin_id = data.get('coin_id')
+            if sid in self.clients and coin_id:
+                self.clients[sid]['subscriptions'].discard(coin_id)
+                await self.sio.emit('subscription_updated', {
+                    'coin_id': coin_id,
+                    'subscribed': False
+                }, room=sid)
+        
+        @self.sio.event
+        async def set_price_alert(sid, data):
+            """Define alerta de preço"""
+            coin_id = data.get('coin_id')
+            price_target = data.get('price_target')
+            alert_type = data.get('type', 'above')  # 'above' ou 'below'
+            
+            if sid in self.clients and coin_id and price_target:
+                user_id = self.clients[sid]['user_id']
+                
+                if user_id not in self.alerts:
+                    self.alerts[user_id] = {}
+                
+                alert_id = f"{coin_id}_{alert_type}_{price_target}"
+                self.alerts[user_id][alert_id] = {
+                    'coin_id': coin_id,
+                    'price_target': float(price_target),
+                    'type': alert_type,
+                    'created_at': datetime.now().isoformat(),
+                    'triggered': False
+                }
+                
+                await self.sio.emit('alert_set', {
+                    'alert_id': alert_id,
+                    'coin_id': coin_id,
+                    'price_target': price_target,
+                    'type': alert_type
+                }, room=sid)
+        
+        @self.sio.event
+        async def get_coin_history(sid, data):
+            """Retorna histórico de uma moeda"""
+            coin_id = data.get('coin_id')
+            if coin_id in self.price_history:
+                await self.sio.emit('coin_history', {
+                    'coin_id': coin_id,
+                    'history': self.price_history[coin_id][-100:]  # Últimos 100 pontos
+                }, room=sid)
+    
+    async def fetch_crypto_prices(self) -> Dict:
+        """Busca preços das criptomoedas"""
+        try:
+            coins_str = ','.join(self.coins_to_track)
+            url = f"{self.api_url}/simple/price"
+            params = {
+                'ids': coins_str,
+                'vs_currencies': 'usd,brl',
+                'include_24hr_change': 'true',
+                'include_24hr_vol': 'true',
+                'include_market_cap': 'true'
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        
+                        # Processa dados
+                        processed_data = {}
+                        timestamp = datetime.now().isoformat()
+                        
+                        for coin_id, coin_data in data.items():
+                            processed_data[coin_id] = {
+                                'id': coin_id,
+                                'name': coin_id.replace('-', ' ').title(),
+                                'price_usd': coin_data.get('usd', 0),
+                                'price_brl': coin_data.get('brl', 0),
+                                'change_24h': coin_data.get('usd_24h_change', 0),
+                                'volume_24h': coin_data.get('usd_24h_vol', 0),
+                                'market_cap': coin_data.get('usd_market_cap', 0),
+                                'timestamp': timestamp
+                            }
+                            
+                            # Armazena no histórico
+                            if coin_id not in self.price_history:
+                                self.price_history[coin_id] = []
+                            
+                            self.price_history[coin_id].append({
+                                'timestamp': timestamp,
+                                'price_usd': coin_data.get('usd', 0),
+                                'price_brl': coin_data.get('brl', 0),
+                                'volume': coin_data.get('usd_24h_vol', 0)
+                            })
+                            
+                            # Mantém apenas últimos 500 pontos
+                            if len(self.price_history[coin_id]) > 500:
+                                self.price_history[coin_id] = self.price_history[coin_id][-500:]
+                        
+                        return processed_data
+                    
+                    else:
+                        print(f"Erro na API: {response.status}")
+                        return {}
+                        
+        except Exception as e:
+            print(f"Erro ao buscar preços: {e}")
+            return {}
+    
+    async def check_price_alerts(self, prices: Dict):
+        """Verifica alertas de preço"""
+        for user_id, user_alerts in self.alerts.items():
+            for alert_id, alert_data in user_alerts.items():
+                if alert_data['triggered']:
+                    continue
+                
+                coin_id = alert_data['coin_id']
+                if coin_id not in prices:
+                    continue
+                
+                current_price = prices[coin_id]['price_usd']
+                target_price = alert_data['price_target']
+                alert_type = alert_data['type']
+                
+                triggered = False
+                if alert_type == 'above' and current_price >= target_price:
+                    triggered = True
+                elif alert_type == 'below' and current_price <= target_price:
+                    triggered = True
+                
+                if triggered:
+                    alert_data['triggered'] = True
+                    alert_data['triggered_at'] = datetime.now().isoformat()
+                    alert_data['triggered_price'] = current_price
+                    
+                    # Envia alerta para o usuário
+                    for sid, client_data in self.clients.items():
+                        if client_data['user_id'] == user_id:
+                            await self.sio.emit('price_alert_triggered', {
+                                'alert_id': alert_id,
+                                'coin_id': coin_id,
+                                'coin_name': prices[coin_id]['name'],
+                                'current_price': current_price,
+                                'target_price': target_price,
+                                'type': alert_type,
+                                'timestamp': alert_data['triggered_at']
+                            }, room=sid)
+    
+    async def send_initial_data(self, sid: str):
+        """Envia dados iniciais para um cliente"""
+        # Dados das moedas
+        if self.price_history:
+            latest_prices = {}
+            for coin_id in self.coins_to_track:
+                if coin_id in self.price_history and self.price_history[coin_id]:
+                    latest_prices[coin_id] = self.price_history[coin_id][-1]
+            
+            await self.sio.emit('initial_data', {
+                'prices': latest_prices,
+                'monitoring': self.monitoring
+            }, room=sid)
+    
+    async def monitor_loop(self):
+        """Loop principal de monitoramento"""
+        self.monitoring = True
+        
+        while self.monitoring and self.clients:
+            try:
+                # Busca preços atualizados
+                prices = await self.fetch_crypto_prices()
+                
+                if prices:
+                    # Verifica alertas
+                    await self.check_price_alerts(prices)
+                    
+                    # Envia atualizações para clientes
+                    for sid, client_data in self.clients.items():
+                        subscriptions = client_data['subscriptions']
+                        
+                        # Filtra apenas moedas inscritas
+                        filtered_prices = {
+                            coin_id: price_data 
+                            for coin_id, price_data in prices.items()
+                            if coin_id in subscriptions
+                        }
+                        
+                        if filtered_prices:
+                            await self.sio.emit('price_update', {
+                                'prices': filtered_prices,
+                                'timestamp': datetime.now().isoformat()
+                            }, room=sid)
+                
+                # Aguarda próxima atualização (30 segundos)
+                await asyncio.sleep(30)
+                
+            except Exception as e:
+                print(f"Erro no loop de monitoramento: {e}")
+                await asyncio.sleep(60)  # Aguarda mais tempo em caso de erro
+        
+        self.monitoring = False
+    
+    async def start_monitoring(self):
+        """Inicia o monitoramento"""
+        if not self.monitoring:
+            asyncio.create_task(self.monitor_loop())
+
+# Execução
+if __name__ == "__main__":
+    import uvicorn
+    
+    crypto_monitor = CryptoMonitor()
+    
+    # Inicia monitoramento
+    asyncio.create_task(crypto_monitor.start_monitoring())
+    
+    print("💰 Iniciando monitor de criptomoedas...")
+    print("📊 Acesse: http://localhost:8002")
+    
+    config = uvicorn.Config(
+        app=crypto_monitor.app,
+        host="0.0.0.0",
+        port=8002,
+        log_level="info"
+    )
+    
+    server = uvicorn.Server(config)
+    asyncio.run(server.serve())
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Produção -->
+            <section id="production" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-primary">
+                    <i class="fas fa-server mr-3"></i>Deploy em Produção
+                </h2>
+
+                <div class="bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-2">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Considerações Críticas para Produção
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <i class="fas fa-shield-alt mr-2"></i>Segurança e autenticação<br>
+                            <i class="fas fa-expand-arrows-alt mr-2"></i>Escalabilidade horizontal<br>
+                            <i class="fas fa-database mr-2"></i>Persistência de dados<br>
+                            <i class="fas fa-tachometer-alt mr-2"></i>Monitoramento e métricas
+                        </div>
+                        <div>
+                            <i class="fas fa-balance-scale mr-2"></i>Load balancing<br>
+                            <i class="fas fa-redo mr-2"></i>Recuperação de falhas<br>
+                            <i class="fas fa-lock mr-2"></i>Rate limiting<br>
+                            <i class="fas fa-cogs mr-2"></i>CI/CD pipeline
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">1. Configuração Docker Completa</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Dockerfile
+FROM python:3.11-slim
+
+# Instala dependências do sistema
+RUN apt-get update && apt-get install -y \
+    gcc \
+    redis-tools \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configura usuário não-root
+RUN useradd --create-home --shell /bin/bash app
+WORKDIR /home/app
+
+# Instala dependências Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia código da aplicação
+COPY --chown=app:app . .
+
+# Muda para usuário não-root
+USER app
+
+# Porta da aplicação
+EXPOSE 8000
+
+# Comando de execução
+CMD ["gunicorn", "--worker-class", "eventlet", "-w", "1", "--bind", "0.0.0.0:8000", "app:app"]
+</code></pre>
+
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto mt-4"><code class="language-yaml"># docker-compose.yml
+version: '3.8'
+
+services:
+  # Aplicação principal
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/realtime_db
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=false
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - ./logs:/home/app/logs
+    networks:
+      - app-network
+
+  # Redis para cache e pub/sub
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # PostgreSQL para dados persistentes
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=realtime_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Nginx como proxy reverso
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Monitoramento com Prometheus
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    networks:
+      - app-network
+
+  # Grafana para dashboards
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app-network
+
+volumes:
+  redis_data:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  app-network:
+    driver: bridge
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">2. Aplicação Escalável com Redis</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-python"># app.py - Aplicação escalável para produção
+import os
+import redis
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+import json
+import jwt
+from functools import wraps
+
+import socketio
+from aioredis import Redis
+import asyncpg
+from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+
+# Configuração de logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Configurações de ambiente
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:password@localhost:5432/realtime_db')
+SECRET_KEY = os.getenv('SECRET_KEY', 'sua-chave-secreta-super-segura')
+DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
+
+class ProductionSocketIOServer:
+    def __init__(self):
+        # Redis para pub/sub entre instâncias
+        self.redis_client = None
+        self.db_pool = None
+        
+        # Socket.IO com Redis adapter
+        self.sio = socketio.AsyncServer(
+            cors_allowed_origins="*" if DEBUG else ["https://seudominio.com"],
+            async_mode='asgi',
+            redis_url=REDIS_URL,
+            logger=DEBUG,
+            engineio_logger=DEBUG
+        )
+        
+        # FastAPI para APIs REST
+        self.app = FastAPI(title="Realtime API", debug=DEBUG)
+        self.security = HTTPBearer()
+        
+        # Configurações de CORS
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"] if DEBUG else ["https://seudominio.com"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+        
+        # Métricas e rate limiting
+        self.metrics = {
+            'connections': 0,
+            'messages_sent': 0,
+            'messages_received': 0,
+            'errors': 0
+        }
+        
+        self.rate_limits = {}  # {user_id: {action: [timestamps]}}
+        
+        self.setup_events()
+        self.setup_routes()
+    
+    async def init_services(self):
+        """Inicializa serviços externos"""
+        try:
+            # Redis
+            self.redis_client = redis.from_url(REDIS_URL)
+            await self.redis_client.ping()
+            logger.info("✅ Redis conectado")
+            
+            # PostgreSQL
+            self.db_pool = await asyncpg.create_pool(DATABASE_URL)
+            logger.info("✅ PostgreSQL conectado")
+            
+        except Exception as e:
+            logger.error(f"❌ Erro ao conectar serviços: {e}")
+            raise
+    
+    def verify_jwt_token(self, credentials: HTTPAuthorizationCredentials = Security(HTTPBearer())):
+        """Verifica token JWT"""
+        try:
+            token = credentials.credentials
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            return payload
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Token expirado")
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail="Token inválido")
+    
+    def check_rate_limit(self, user_id: str, action: str, limit: int = 60, window: int = 60) -> bool:
+        """Verifica rate limiting"""
+        now = datetime.now()
+        window_start = now - timedelta(seconds=window)
+        
+        if user_id not in self.rate_limits:
+            self.rate_limits[user_id] = {}
+        
+        if action not in self.rate_limits[user_id]:
+            self.rate_limits[user_id][action] = []
+        
+        # Remove timestamps antigos
+        self.rate_limits[user_id][action] = [
+            ts for ts in self.rate_limits[user_id][action] 
+            if ts > window_start
+        ]
+        
+        # Verifica limite
+        if len(self.rate_limits[user_id][action]) >= limit:
+            return False
+        
+        # Adiciona timestamp atual
+        self.rate_limits[user_id][action].append(now)
+        return True
+    
+    def setup_events(self):
+        @self.sio.event
+        async def connect(sid, environ, auth):
+            """Evento de conexão com autenticação"""
+            try:
+                # Verifica autenticação
+                if not auth or 'token' not in auth:
+                    logger.warning(f"Conexão rejeitada - sem token: {sid}")
+                    return False
+                
+                # Valida token
+                try:
+                    payload = jwt.decode(auth['token'], SECRET_KEY, algorithms=['HS256'])
+                    user_id = payload.get('user_id')
+                    username = payload.get('username')
+                    
+                    if not user_id or not username:
+                        logger.warning(f"Token inválido - dados faltando: {sid}")
+                        return False
+                        
+                except jwt.InvalidTokenError as e:
+                    logger.warning(f"Token JWT inválido: {e}")
+                    return False
+                
+                # Rate limiting para conexões
+                if not self.check_rate_limit(user_id, 'connect', limit=10, window=60):
+                    logger.warning(f"Rate limit excedido para conexão: {user_id}")
+                    return False
+                
+                # Armazena dados do usuário na sessão
+                async with self.sio.session(sid) as session:
+                    session['user_id'] = user_id
+                    session['username'] = username
+                    session['connected_at'] = datetime.now().isoformat()
+                
+                # Armazena no Redis para compartilhamento entre instâncias
+                user_data = {
+                    'sid': sid,
+                    'user_id': user_id,
+                    'username': username,
+                    'connected_at': datetime.now().isoformat(),
+                    'instance': os.getpid()  # ID da instância
+                }
+                
+                await self.redis_client.hset(
+                    f"user_sessions:{user_id}", 
+                    sid, 
+                    json.dumps(user_data)
+                )
+                
+                # Métricas
+                self.metrics['connections'] += 1
+                
+                logger.info(f"✅ Usuário conectado: {username} ({user_id}) - SID: {sid}")
+                
+                # Envia confirmação
+                await self.sio.emit('authenticated', {
+                    'user_id': user_id,
+                    'username': username,
+                    'server_time': datetime.now().isoformat()
+                }, room=sid)
+                
+                return True
+                
+            except Exception as e:
+                logger.error(f"Erro na conexão: {e}")
+                self.metrics['errors'] += 1
+                return False
+        
+        @self.sio.event
+        async def disconnect(sid):
+            """Evento de desconexão"""
+            try:
+                # Recupera dados da sessão
+                async with self.sio.session(sid) as session:
+                    user_id = session.get('user_id')
+                    username = session.get('username')
+                
+                if user_id:
+                    # Remove do Redis
+                    await self.redis_client.hdel(f"user_sessions:{user_id}", sid)
+                    
+                    # Se não há mais sessões ativas, remove usuário completamente
+                    sessions = await self.redis_client.hgetall(f"user_sessions:{user_id}")
+                    if not sessions:
+                        await self.redis_client.delete(f"user_sessions:{user_id}")
+                    
+                    logger.info(f"❌ Usuário desconectado: {username} ({user_id})")
+                
+                self.metrics['connections'] -= 1
+                
+            except Exception as e:
+                logger.error(f"Erro na desconexão: {e}")
+        
+        @self.sio.event
+        async def join_room(sid, data):
+            """Usuário entra em uma sala"""
+            try:
+                async with self.sio.session(sid) as session:
+                    user_id = session.get('user_id')
+                    username = session.get('username')
+                
+                if not user_id:
+                    await self.sio.emit('error', {'message': 'Não autenticado'}, room=sid)
+                    return
+                
+                room_name = data.get('room', '').strip()
+                if not room_name:
+                    await self.sio.emit('error', {'message': 'Nome da sala inválido'}, room=sid)
+                    return
+                
+                # Rate limiting
+                if not self.check_rate_limit(user_id, 'join_room', limit=20, window=60):
+                    await self.sio.emit('error', {'message': 'Rate limit excedido'}, room=sid)
+                    return
+                
+                # Valida permissão (implementar lógica de negócio)
+                if not await self.user_can_join_room(user_id, room_name):
+                    await self.sio.emit('error', {'message': 'Sem permissão para esta sala'}, room=sid)
+                    return
+                
+                # Entra na sala
+                await self.sio.enter_room(sid, room_name)
+                
+                # Armazena no banco de dados
+                async with self.db_pool.acquire() as conn:
+                    await conn.execute("""
+                        INSERT INTO room_memberships (user_id, room_name, joined_at)
+                        VALUES ($1, $2, $3)
+                        ON CONFLICT (user_id, room_name) 
+                        DO UPDATE SET joined_at = $3
+                    """, user_id, room_name, datetime.now())
+                
+                # Notifica outros usuários
+                await self.sio.emit('user_joined', {
+                    'user_id': user_id,
+                    'username': username,
+                    'room': room_name,
+                    'timestamp': datetime.now().isoformat()
+                }, room=room_name, skip_sid=sid)
+                
+                # Confirma para o usuário
+                await self.sio.emit('joined_room', {
+                    'room': room_name,
+                    'timestamp': datetime.now().isoformat()
+                }, room=sid)
+                
+                logger.info(f"🏠 {username} entrou na sala {room_name}")
+                
+            except Exception as e:
+                logger.error(f"Erro ao entrar na sala: {e}")
+                await self.sio.emit('error', {'message': 'Erro interno'}, room=sid)
+                self.metrics['errors'] += 1
+        
+        @self.sio.event
+        async def send_message(sid, data):
+            """Envia mensagem para uma sala"""
+            try:
+                async with self.sio.session(sid) as session:
+                    user_id = session.get('user_id')
+                    username = session.get('username')
+                
+                if not user_id:
+                    await self.sio.emit('error', {'message': 'Não autenticado'}, room=sid)
+                    return
+                
+                room_name = data.get('room', '').strip()
+                message = data.get('message', '').strip()
+                
+                if not room_name or not message:
+                    await self.sio.emit('error', {'message': 'Dados inválidos'}, room=sid)
+                    return
+                
+                # Rate limiting para mensagens
+                if not self.check_rate_limit(user_id, 'send_message', limit=30, window=60):
+                    await self.sio.emit('error', {'message': 'Muitas mensagens. Aguarde.'}, room=sid)
+                    return
+                
+                # Validação de conteúdo (implementar filtros)
+                if not await self.validate_message_content(message):
+                    await self.sio.emit('error', {'message': 'Mensagem contém conteúdo proibido'}, room=sid)
+                    return
+                
+                # Verifica se usuário está na sala
+                if not await self.user_in_room(user_id, room_name):
+                    await self.sio.emit('error', {'message': 'Você não está nesta sala'}, room=sid)
+                    return
+                
+                # Cria mensagem
+                message_id = await self.save_message(user_id, room_name, message)
+                
+                message_data = {
+                    'id': message_id,
+                    'user_id': user_id,
+                    'username': username,
+                    'message': message,
+                    'room': room_name,
+                    'timestamp': datetime.now().isoformat()
+                }
+                
+                # Envia para todos na sala
+                await self.sio.emit('new_message', message_data, room=room_name)
+                
+                # Métricas
+                self.metrics['messages_sent'] += 1
+                self.metrics['messages_received'] += 1
+                
+                logger.info(f"💬 [{room_name}] {username}: {message[:50]}...")
+                
+            except Exception as e:
+                logger.error(f"Erro ao enviar mensagem: {e}")
+                await self.sio.emit('error', {'message': 'Erro interno'}, room=sid)
+                self.metrics['errors'] += 1
+    
+    async def user_can_join_room(self, user_id: str, room_name: str) -> bool:
+        """Verifica se usuário pode entrar na sala"""
+        # Implementar lógica de negócio específica
+        # Ex: salas privadas, banimentos, etc.
+        return True
+    
+    async def user_in_room(self, user_id: str, room_name: str) -> bool:
+        """Verifica se usuário está na sala"""
+        async with self.db_pool.acquire() as conn:
+            result = await conn.fetchval("""
+                SELECT EXISTS(
+                    SELECT 1 FROM room_memberships 
+                    WHERE user_id = $1 AND room_name = $2
+                )
+            """, user_id, room_name)
+            return result
+    
+    async def validate_message_content(self, message: str) -> bool:
+        """Valida conteúdo da mensagem"""
+        # Implementar filtros de spam, palavrões, etc.
+        if len(message) > 1000:  # Limite de caracteres
+            return False
+        
+        # Lista de palavras proibidas (exemplo simplificado)
+        forbidden_words = ['spam', 'hack', 'phishing']
+        message_lower = message.lower()
+        
+        for word in forbidden_words:
+            if word in message_lower:
+                return False
+        
+        return True
+    
+    async def save_message(self, user_id: str, room_name: str, message: str) -> str:
+        """Salva mensagem no banco de dados"""
+        async with self.db_pool.acquire() as conn:
+            message_id = await conn.fetchval("""
+                INSERT INTO messages (user_id, room_name, content, created_at)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id
+            """, user_id, room_name, message, datetime.now())
+            
+            return str(message_id)
+    
+    def setup_routes(self):
+        """Configura rotas da API REST"""
+        
+        @self.app.get("/health")
+        async def health_check():
+            """Health check para load balancer"""
+            return {
+                "status": "healthy",
+                "timestamp": datetime.now().isoformat(),
+                "metrics": self.metrics
+            }
+        
+        @self.app.get("/metrics")
+        async def get_metrics():
+            """Métricas da aplicação"""
+            return {
+                "metrics": self.metrics,
+                "redis_info": await self.get_redis_info(),
+                "db_pool_info": {
+                    "size": self.db_pool.get_size(),
+                    "max_size": self.db_pool.get_max_size(),
+                    "min_size": self.db_pool.get_min_size()
+                }
+            }
+        
+        @self.app.post("/auth/token")
+        async def create_token(user_data: dict):
+            """Cria token JWT (implementar autenticação real)"""
+            # Em produção, verificar credenciais no banco
+            payload = {
+                'user_id': user_data.get('user_id'),
+                'username': user_data.get('username'),
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }
+            
+            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+            return {"access_token": token, "token_type": "bearer"}
+    
+    async def get_redis_info(self):
+        """Informações do Redis"""
+        try:
+            info = await self.redis_client.info()
+            return {
+                "connected_clients": info.get('connected_clients'),
+                "used_memory_human": info.get('used_memory_human'),
+                "total_commands_processed": info.get('total_commands_processed')
+            }
+        except:
+            return {"error": "Redis não disponível"}
+
+# Inicialização da aplicação
+server = ProductionSocketIOServer()
+app = socketio.ASGIApp(server.sio, server.app)
+
+@app.on_event("startup")
+async def startup_event():
+    await server.init_services()
+
+if __name__ == "__main__":
+    config = uvicorn.Config(
+        app=app,
+        host="0.0.0.0",
+        port=8000,
+        log_level="info",
+        access_log=True
+    )
+    
+    server = uvicorn.Server(config)
+    asyncio.run(server.serve())
+</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">3. Scripts de Deploy e Monitoramento</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code class="language-bash">#!/bin/bash
+# deploy.sh - Script de deploy automatizado
+
+set -e
+
+echo "🚀 Iniciando deploy da aplicação..."
+
+# Variáveis
+APP_NAME="realtime-app"
+DOCKER_REGISTRY="seu-registry.com"
+VERSION=$(git rev-parse --short HEAD)
+
+# Build da imagem
+echo "📦 Construindo imagem Docker..."
+docker build -t $DOCKER_REGISTRY/$APP_NAME:$VERSION .
+docker tag $DOCKER_REGISTRY/$APP_NAME:$VERSION $DOCKER_REGISTRY/$APP_NAME:latest
+
+# Push para registry
+echo "📤 Enviando para registry..."
+docker push $DOCKER_REGISTRY/$APP_NAME:$VERSION
+docker push $DOCKER_REGISTRY/$APP_NAME:latest
+
+# Deploy usando docker-compose
+echo "🔄 Fazendo deploy..."
+export IMAGE_VERSION=$VERSION
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml up -d
+
+# Aguarda aplicação ficar saudável
+echo "🏥 Verificando saúde da aplicação..."
+for i in {1..30}; do
+    if curl -f http://localhost:8000/health > /dev/null 2>&1; then
+        echo "✅ Aplicação está saudável!"
+        break
+    fi
+    echo "Aguardando... ($i/30)"
+    sleep 10
+done
+
+# Testes de smoke
+echo "🧪 Executando testes de smoke..."
+curl -f http://localhost:8000/health
+curl -f http://localhost:8000/metrics
+
+echo "🎉 Deploy concluído com sucesso!"
+</code></pre>
+
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto mt-4"><code class="language-yaml"># prometheus.yml - Configuração do Prometheus
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  - job_name: 'realtime-app'
+    static_configs:
+      - targets: ['app:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:80']
+</code></pre>
+
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto mt-4"><code class="language-yaml"># kubernetes.yml - Deploy no Kubernetes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realtime-app
+  labels:
+    app: realtime-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: realtime-app
+  template:
+    metadata:
+      labels:
+        app: realtime-app
+    spec:
+      containers:
+      - name: app
+        image: seu-registry.com/realtime-app:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: REDIS_URL
+          value: "redis://redis-service:6379"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: url
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: secret-key
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: realtime-app-service
+spec:
+  selector:
+    app: realtime-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: realtime-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: realtime-app
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+</code></pre>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 dark:bg-dark-card border-t border-gray-200 dark:border-gray-700 py-8">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-code mr-2"></i>
+                    Apostila criada para estudo de serviços em tempo real com Python
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                    WebSocket • Socket.IO • Redis • Docker • Kubernetes
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600';
+            });
+            
+            event.target.className = 'nav-btn px-4 py-2 rounded-lg bg-primary text-white';
+        }
+
+        // Demo Chat Functions
+        function sendDemoMessage() {
+            const input = document.getElementById('demo-message-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addDemoMessage('Você', message, 'sent');
+            input.value = '';
+            
+            // Simulate response
+            setTimeout(() => {
+                const responses = [
+                    'Interessante! Conte-me mais.',
+                    'Entendi, obrigado por compartilhar.',
+                    'Essa é uma boa observação!',
+                    'Vou considerar isso. Valeu!',
+                    'Excelente ponto de vista!'
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addDemoMessage('Bot', randomResponse, 'received');
+            }, 1000 + Math.random() * 2000);
+        }
+
+        function addDemoMessage(username, message, type) {
+            const chatMessages = document.getElementById('demo-chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-3 ${type === 'sent' ? 'text-right' : 'text-left'}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const bgColor = type === 'sent' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white';
+            
+            messageDiv.innerHTML = `
+                <div class="inline-block max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${bgColor}">
+                    <div class="font-semibold text-sm">${username}</div>
+                    <div>${message}</div>
+                    <div class="text-xs opacity-75 mt-1">${timestamp}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function simulateUserJoin() {
+            const users = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve'];
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            addDemoMessage('Sistema', `${randomUser} entrou na sala`, 'system');
+        }
+
+        function simulateSystemMessage() {
+            const messages = [
+                'Servidor será reiniciado em 5 minutos',
+                'Nova funcionalidade disponível!',
+                'Backup automático concluído',
+                'Usuários online: 47'
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            addDemoMessage('Sistema', randomMessage, 'system');
+        }
+
+        function simulatePrivateMessage() {
+            const users = ['Ana', 'Carlos', 'Bruno', 'Fernanda'];
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            addDemoMessage(`${randomUser} (privado)`, 'Oi! Como você está?', 'private');
+        }
+
+        function clearDemoChat() {
+            document.getElementById('demo-chat-messages').innerHTML = '';
+        }
+
+        // Dashboard Functions
+        let dashboardInterval = null;
+        let dashboardActive = false;
+
+        function toggleDashboard() {
+            const btnText = document.getElementById('dashboard-btn-text');
+            
+            if (dashboardActive) {
+                clearInterval(dashboardInterval);
+                dashboardActive = false;
+                btnText.textContent = 'Iniciar Dashboard';
+            } else {
+                startDashboard();
+                dashboardActive = true;
+                btnText.textContent = 'Parar Dashboard';
+            }
+        }
+
+        function startDashboard() {
+            dashboardInterval = setInterval(updateDashboard, 2000);
+        }
+
+        function updateDashboard() {
+            // Update metrics
+            const usersOnline = Math.floor(Math.random() * 100) + 50;
+            const messagesPerMin = Math.floor(Math.random() * 50) + 10;
+            
+            document.getElementById('metric-users').textContent = usersOnline;
+            document.getElementById('metric-messages').textContent = messagesPerMin;
+            
+            // Add activity log
+            const activities = [
+                'Usuário conectado: user123',
+                'Nova mensagem na sala #geral',
+                'Servidor: CPU 45%',
+                'Cache Redis atualizado',
+                'Backup automático iniciado'
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            addActivityLog(randomActivity);
+        }
+
+        function addActivityLog(message) {
+            const activityLog = document.getElementById('activity-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'text-xs text-gray-600 dark:text-gray-400 mb-1';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            activityLog.appendChild(logEntry);
+            
+            // Keep only last 10 entries
+            while (activityLog.children.length > 10) {
+                activityLog.removeChild(activityLog.firstChild);
+            }
+            
+            activityLog.scrollTop = activityLog.scrollHeight;
+        }
+
+        // Notification Functions
+        function sendNotification() {
+            const type = document.getElementById('notification-type').value;
+            const message = document.getElementById('notification-message').value.trim();
+            
+            if (!message) {
+                alert('Digite uma mensagem para a notificação');
+                return;
+            }
+            
+            addNotification(type, message);
+            document.getElementById('notification-message').value = '';
+        }
+
+        function addNotification(type, message) {
+            const container = document.getElementById('notifications-container');
+            
+            // Remove placeholder if exists
+            if (container.querySelector('.text-gray-500')) {
+                container.innerHTML = '';
+            }
+            
+            const notification = document.createElement('div');
+            const typeColors = {
+                info: 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-800 dark:text-blue-200',
+                success: 'bg-green-100 dark:bg-green-900 border-green-400 text-green-800 dark:text-green-200',
+                warning: 'bg-yellow-100 dark:bg-yellow-900 border-yellow-400 text-yellow-800 dark:text-yellow-200',
+                error: 'bg-red-100 dark:bg-red-900 border-red-400 text-red-800 dark:text-red-200'
+            };
+            
+            const typeIcons = {
+                info: 'fas fa-info-circle',
+                success: 'fas fa-check-circle',
+                warning: 'fas fa-exclamation-triangle',
+                error: 'fas fa-times-circle'
+            };
+            
+            notification.className = `border-l-4 p-3 rounded ${typeColors[type]}`;
+            notification.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center">
+                        <i class="${typeIcons[type]} mr-2"></i>
+                        <span class="text-sm">${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="text-xs opacity-75 mt-1">
+                    ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            
+            container.insertBefore(notification, container.firstChild);
+            
+            // Auto remove after 5 seconds for success notifications
+            if (type === 'success') {
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        function clearNotifications() {
+            const container = document.getElementById('notifications-container');
+            container.innerHTML = '<div class="text-gray-500 text-center py-4">Nenhuma notificação</div>';
+        }
+
+        // Initialize demo messages
+        document.addEventListener('DOMContentLoaded', function() {
+            addDemoMessage('Sistema', 'Bem-vindo ao chat demo!', 'system');
+            addDemoMessage('Ana', 'Olá pessoal! Como estão?', 'received');
+            addDemoMessage('Carlos', 'Tudo bem! Testando este chat incrível', 'received');
+            
+            // Initialize activity log
+            document.getElementById('activity-log').innerHTML = '<div class="text-gray-500">Aguardando atividades...</div>';
+        });
+
+        // Enter key support for demo chat
+        document.getElementById('demo-message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendDemoMessage();
+            }
+        });
+
+        // Enter key support for notifications
+        document.getElementById('notification-message').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendNotification();
+            }
+        });
+    </script>
+</body>
+</html>
